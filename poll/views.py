@@ -15,7 +15,7 @@ def register_page(request):
         form = UserCreationForm(request.POST)
         if form.is_valid():
             form.save()
-            messages.success(request,'Account is created')
+            return redirect("poll:loginpage")
 
     return render(request,'poll/register.html',{'form':form})
 def login_page(request):
