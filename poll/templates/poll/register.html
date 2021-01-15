@@ -1,0 +1,16 @@
+{% extends "poll/base.html" %}
+{% block main %}
+<div class="row">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Register</h3>
+        </div>
+    </div>
+    <form method ="POST", action="">
+        {% csrf_token %}
+        {{form.as_p}}
+        <input type="submit" name="Create Account">
+    </form>
+    <a href="{% url 'poll:loginpage'%}">Login?</a>
+</div>
+{% endblock %}

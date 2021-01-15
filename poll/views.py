@@ -1,10 +1,44 @@
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from django.views import generic
+from django.contrib.auth.forms import UserCreationForm,AuthenticationForm
+from django.contrib.auth import login, logout, authenticate
+from django.contrib import messages
 
 from .models import Choice, Question
 # Create your views here.
+def register_page(request):
+    form = UserCreationForm()
+
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request,'Account is created')
+
+    return render(request,'poll/register.html',{'form':form})
+def login_page(request):
+    form = AuthenticationForm()
+
+    if request.method == 'POST':
+        form = AuthenticationForm(request,data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(username=username,password=password)
+            if user is not None:
+                login(request, user)
+                messages.info(request,'Login in succssfully')
+                return redirect("poll:index")
+            else:
+                messages.error(request,'Login failed. Check username or password')
+        else:
+            messages.error(request,'Invalid')
+    return render(request,'poll/login.html',{'form':form})
+def logout_page(request):
+    logout(request)
+    return redirect("poll:index")
 def index(request):
     latest_question_list = Question.objects.order_by('-pub_date')[:5]
     context = {

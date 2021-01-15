@@ -18,3 +18,15 @@ class Choice(models.Model):
     votes = models.IntegerField(default=0)
     def __str__(self):
         return self.choice_text
+
+class Bundle(models.Model):
+    class BundleType(models.TextChoices):
+        BOOKS = 'BK'
+        SOFTWARE = 'SW'
+        COMICS = 'CM'
+    
+    bundle_type = models.CharField(max_length=2,choices= BundleType.choices,default=BundleType.BOOKS,)
+    number_of_days = models.IntegerField(default=0)
+    title_text = models.CharField(max_length=200)
+    description_text = models.CharField(max_length=500)
+   # model_pic = models.ImageField(upload_to = 'pic_folder/', default = 'pic_folder/None/no-img.jpg')
